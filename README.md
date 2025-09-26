@@ -38,4 +38,4 @@ To get the project up and running, follow these steps:
 This project is a Minimum Viable Product (MVP) developed for the SWE4900A course. It is intended to be a functional prototype for simulation and evaluation, not a full-scale, real-world deployment.
 
 ## License
-[Add license information, e.g., MIT, if applicable]
+This project is licensed under the Apache License 2.0.
