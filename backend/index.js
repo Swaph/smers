@@ -7,7 +7,62 @@ const app = express();
 
 // --- MIDDLEWARE ---
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
+
+const PRIORITY_MAP = { CRITICAL: 5, HIGH: 4, MEDIUM: 3, LOW: 2, MINOR: 1 };
+const ALLOWED_ROLES = new Set(['admin', 'dispatcher', 'auditor']);
+
+const isFiniteNumber = (value) => Number.isFinite(Number(value));
+const normalizePriority = (priority) => {
+    if (typeof priority === 'number') {
+        const clamped = Math.max(1, Math.min(5, priority));
+        return Math.round(clamped);
+    }
+
+    if (typeof priority === 'string') {
+        const asNumber = Number(priority);
+        if (Number.isFinite(asNumber)) {
+            const clamped = Math.max(1, Math.min(5, asNumber));
+            return Math.round(clamped);
+        }
+
+        return PRIORITY_MAP[priority.toUpperCase()] || 3;
+    }
+
+    return 3;
+};
+
+const parsePositiveInt = (value) => {
+    const parsed = Number.parseInt(value, 10);
+    return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+};
+
+const badRequest = (res, message, details) =>
+    res.status(400).json({ error: message, ...(details ? { details } : {}) });
+
+const validateCoordinates = (latitude, longitude) => {
+    const lat = Number(latitude);
+    const lng = Number(longitude);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+        return { valid: false, message: 'Latitude and longitude must be valid numbers.' };
+    }
+
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        return { valid: false, message: 'Latitude/longitude out of valid range.' };
+    }
+
+    return { valid: true, lat, lng };
+};
+
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        service: 'smers-backend',
+        uptime_seconds: Math.round(process.uptime()),
+        timestamp: new Date().toISOString(),
+    });
+});
 
 // ==========================================
 // 1. SYSTEM HEALTH CHECK
@@ -93,14 +148,16 @@ app.post('/api/requests', async (req, res) => {
         longitude
     } = req.body;
 
-    // Map priority string to integer
-    const priorityMap = { 'CRITICAL': 5, 'HIGH': 4, 'MEDIUM': 3, 'LOW': 2, 'MINOR': 1 };
-    let numericScore = 3;
-    if (typeof priority === 'number') {
-        numericScore = priority;
-    } else if (priority) {
-        numericScore = priorityMap[priority.toUpperCase()] || 3;
+    if (!contact_number || !location_name || !symptoms) {
+        return badRequest(res, 'contact_number, location_name and symptoms are required.');
     }
+
+    const coordCheck = validateCoordinates(latitude, longitude);
+    if (!coordCheck.valid) {
+        return badRequest(res, coordCheck.message);
+    }
+
+    const numericScore = normalizePriority(priority);
 
     try {
         const query = `
@@ -118,8 +175,8 @@ app.post('/api/requests', async (req, res) => {
             location_name,
             symptoms,
             numericScore,
-            latitude,
-            longitude
+            coordCheck.lat,
+            coordCheck.lng
         ];
 
         const { rows } = await db.query(query, values);
@@ -137,16 +194,37 @@ app.put('/api/requests/:id/assign', async (req, res) => {
     const { responder_id } = req.body;
     const incident_id = req.params.id;
 
+    const parsedIncidentId = parsePositiveInt(incident_id);
+    const parsedResponderId = parsePositiveInt(responder_id);
+
+    if (!parsedIncidentId || !parsedResponderId) {
+        return badRequest(res, 'Valid incident id and responder_id are required.');
+    }
+
     try {
+        const responderCheck = await db.query(
+            'SELECT responder_id FROM responders WHERE responder_id = $1 AND is_active = TRUE',
+            [parsedResponderId]
+        );
+
+        if (responderCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'Responder not found or inactive.' });
+        }
+
         const query = `
             UPDATE incidents
             SET status = 'Dispatched', assigned_responder_id = $1
             WHERE incident_id = $2
                 RETURNING *;
         `;
-        await db.query(query, [responder_id, incident_id]);
-        console.log(`🚁 Dispatch: Incident ${incident_id} -> Unit ${responder_id}`);
-        res.json({ success: true });
+        const result = await db.query(query, [parsedResponderId, parsedIncidentId]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Incident not found.' });
+        }
+
+        console.log(`Dispatch: Incident ${parsedIncidentId} -> Unit ${parsedResponderId}`);
+        res.json({ success: true, incident_id: parsedIncidentId, responder_id: parsedResponderId });
     } catch (err) {
         console.error('Dispatch error:', err);
         res.status(500).json({ error: 'Dispatch failed' });
@@ -233,6 +311,15 @@ app.get('/api/users', async (req, res) => {
 // CREATE User
 app.post('/api/users', async (req, res) => {
     const { full_name, role, username } = req.body;
+
+    if (!full_name || !username || !role) {
+        return badRequest(res, 'full_name, username and role are required.');
+    }
+
+    if (!ALLOWED_ROLES.has(String(role).toLowerCase())) {
+        return badRequest(res, 'Invalid role. Allowed roles: admin, dispatcher, auditor.');
+    }
+
     try {
         const query = `
             INSERT INTO users (full_name, role, username, password_hash, is_active)
@@ -254,7 +341,25 @@ app.put('/api/users/:id', async (req, res) => {
     const { full_name, username, role, status, phone_number, location } = req.body;
 
     // Map status string "Active"/"Inactive" to boolean
-    const isActive = status === 'Active';
+    const parsedUserId = parsePositiveInt(id);
+    if (!parsedUserId) {
+        return badRequest(res, 'Invalid user id.');
+    }
+
+    if (!full_name || !username || !role) {
+        return badRequest(res, 'full_name, username and role are required.');
+    }
+
+    if (!ALLOWED_ROLES.has(String(role).toLowerCase())) {
+        return badRequest(res, 'Invalid role. Allowed roles: admin, dispatcher, auditor.');
+    }
+
+    const normalizedStatus = String(status || 'Active').toLowerCase();
+    if (!['active', 'inactive'].includes(normalizedStatus)) {
+        return badRequest(res, 'status must be Active or Inactive.');
+    }
+
+    const isActive = normalizedStatus === 'active';
 
     try {
         const query = `
@@ -275,9 +380,9 @@ app.put('/api/users/:id', async (req, res) => {
             username,
             role,
             isActive,
-            phone_number,
-            location,
-            id
+            phone_number || null,
+            location || null,
+            parsedUserId
         ]);
 
         if (rows.length === 0) {
@@ -294,19 +399,35 @@ app.put('/api/users/:id', async (req, res) => {
 // DELETE User
 app.delete('/api/users/:id', async (req, res) => {
     const { id } = req.params;
+    const parsedUserId = parsePositiveInt(id);
+
+    if (!parsedUserId) {
+        return badRequest(res, 'Invalid user id.');
+    }
+
     try {
         const query = 'DELETE FROM users WHERE user_id = $1 RETURNING user_id';
-        const { rows } = await db.query(query, [id]);
+        const { rows } = await db.query(query, [parsedUserId]);
 
         if (rows.length === 0) {
             return res.status(404).json({ error: 'User not found' });
         }
-        console.log(`User Deleted: ID ${id}`);
+        console.log(`User Deleted: ID ${parsedUserId}`);
         res.json({ message: 'User deleted successfully' });
     } catch (err) {
         console.error('Error deleting user:', err);
         res.status(500).json({ error: 'Server error deleting user' });
     }
+});
+
+// 404 fallback for unknown API routes
+app.use('/api/*', (req, res) => {
+    res.status(404).json({ error: 'API route not found.' });
+});
+
+app.use((err, req, res, next) => {
+    console.error('Unhandled server error:', err);
+    res.status(500).json({ error: 'Unexpected server error' });
 });
 
 // ==========================================

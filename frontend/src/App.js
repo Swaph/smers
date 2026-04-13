@@ -13,10 +13,9 @@ import UnitsView from './pages/UnitsView';
 import ProfileView from './pages/ProfileView';
 import MainDashboardView from './pages/MainDashboardView';
 import UserManagementView from './pages/UserManagementView';
+import { API_URL } from './config';
 
 // --- CONSTANTS ---
-const API_URL = 'http://localhost:5000/api';
-
 const hospitals = [
     { name: "Nanyuki Teaching & Referral Hospital", position: [0.0160, 37.0760] },
     { name: "Nanyuki Cottage Hospital", position: [0.0085, 37.0705] },

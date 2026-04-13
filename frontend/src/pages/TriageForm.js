@@ -22,6 +22,8 @@ function TriageForm({ addRequest }) { // addRequest is the function from App.js 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const isValidKenyanPhone = (value) => /^(?:\+254|0)7\d{8}$/.test((value || '').trim());
+
     useEffect(() => {
         setPriority(assignPriority(symptoms));
     }, [symptoms]);
@@ -31,9 +33,15 @@ function TriageForm({ addRequest }) { // addRequest is the function from App.js 
         setLoading(true);
         setError(null);
 
-        // Generate Laikipia Coordinate Jitter
-        const lat = -3.63 + (Math.random() - 0.5) * 0.05;
-        const lon = 39.85 + (Math.random() - 0.5) * 0.05;
+        if (!isValidKenyanPhone(contactNumber)) {
+            setError("Use a valid Kenyan mobile number, e.g. 07XXXXXXXX or +2547XXXXXXXX.");
+            setLoading(false);
+            return;
+        }
+
+        // Generate Nanyuki-area coordinate jitter for simulation realism
+        const lat = 0.0166 + (Math.random() - 0.5) * 0.03;
+        const lon = 37.0741 + (Math.random() - 0.5) * 0.03;
 
         // Construct object for DB (matching schema)
 
@@ -92,7 +100,7 @@ function TriageForm({ addRequest }) { // addRequest is the function from App.js 
 
                     <Box sx={{ my: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', bgcolor: '#f5f5f5', p: 1, borderRadius: 1 }}>
                         <Typography variant="subtitle2">AI Assessment:</Typography>
-                        <Chip label={priority.level} color={priority.color} onDelete={() => {}} />
+                        <Chip label={priority.level} color={priority.color} />
                     </Box>
 
                     <Button

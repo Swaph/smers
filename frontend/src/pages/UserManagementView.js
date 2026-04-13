@@ -14,8 +14,7 @@ import {
     Delete as DeleteIcon
 } from '@mui/icons-material';
 import AddUserForm from './AddUserForm';
-
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '../config';
 
 function UserManagementView() {
     const [view, setView] = useState('list');
