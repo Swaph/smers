@@ -60,6 +60,14 @@ An incremental agile approach is used:
 3. database: PostgreSQL;
 4. tooling: npm, Git, GitHub.
 
+### 5.4 Geographic Focus and Justification
+
+The prototype map and simulation coordinates are intentionally centered on Laikipia County, Kenya, with emphasis on the Nanyuki operational area. This geographic choice is both practical and personal:
+
+1. it provides a realistic local context for emergency transport simulation;
+2. it aligns with known facility and mobility patterns used in prototype testing;
+3. it serves as a deliberate homage to the developer's home county, grounding the project in community identity and lived relevance.
+
 ## 6. Proposed System Features
 
 1. incident capture with triage score;

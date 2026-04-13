@@ -108,6 +108,8 @@ The frontend provides:
 3. geospatial dashboard with responder and incident markers;
 4. administrative views for analytics, payments, and user management.
 
+The geospatial prototype is intentionally configured around Laikipia County (centered on the Nanyuki area). Beyond simulation practicality, this was a conscious homage to the developer's home county, linking technical design decisions to local identity and community-centered motivation.
+
 ### 4.3 Configuration and DevOps Readiness
 
 1. environment template files for backend and frontend;

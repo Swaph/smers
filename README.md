@@ -39,6 +39,7 @@ Maternal emergencies in peri-urban and informal settlement regions are often del
 - Map visualization of incidents and responders.
 - Live operations feed with priority labeling.
 - Priority normalization across numeric and categorical values.
+- Prototype map centered on Laikipia County (Nanyuki area) as both a realistic simulation context and a homage to the developer's home county.
 
 ### Administrator Oversight
 
