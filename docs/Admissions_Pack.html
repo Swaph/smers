@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMERS Admissions Pack</title>
+  <style>
+    :root {
+      --ink: #15263e;
+      --muted: #4a5d78;
+      --line: #d5dfec;
+      --paper: #ffffff;
+      --bg: #f4f8fe;
+      --primary: #0f66ab;
+      --primary-2: #0b4e87;
+      --ok: #13745a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .page {
+      width: min(980px, 92vw);
+      margin: 30px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 10px 24px rgba(21, 38, 62, 0.08);
+      padding: 28px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.7rem, 3vw, 2.2rem);
+      line-height: 1.2;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 1.02rem;
+    }
+
+    .meta {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-left: 4px solid var(--primary);
+      background: #eef5fd;
+      color: #234365;
+      font-size: 0.96rem;
+    }
+
+    .section {
+      margin-top: 22px;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 7px;
+    }
+
+    .downloads {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 10px;
+    }
+
+    .dl {
+      grid-column: span 12;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 11px 12px;
+      background: #fbfdff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (min-width: 900px) {
+      .dl { grid-column: span 6; }
+    }
+
+    .label {
+      font-weight: 600;
+      color: #1e3553;
+    }
+
+    .btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    a.btn {
+      text-decoration: none;
+      font-weight: 700;
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 0.85rem;
+      border: 1px solid transparent;
+      display: inline-block;
+    }
+
+    .view {
+      background: #e6f2fe;
+      border-color: #bfd9f6;
+      color: var(--primary-2);
+    }
+
+    .download {
+      background: #e7f7f1;
+      border-color: #bfe8da;
+      color: var(--ok);
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.7;
+    }
+
+    .toplinks {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .small {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+    }
+
+    .print-note {
+      margin-top: 10px;
+      color: #39587c;
+      font-size: 0.9rem;
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page { box-shadow: none; border: none; margin: 0; width: 100%; }
+      a.btn { border: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>SMERS Admissions Pack</h1>
+    <p class="sub">
+      Curated evidence package for graduate admissions review, including concept papers, proposal, final thesis, design documentation, progress artifacts, and UML assets.
+    </p>
+
+    <div class="meta">
+      <strong>Project:</strong> Smart Maternal Emergency Response System (SMERS) · <strong>Repository:</strong> Swaph/smers
+    </div>
+
+    <div class="toplinks">
+      <a class="btn view" href="Home.html">Documentation Home</a>
+      <a class="btn view" href="PDF_Submissions.html">PDF Portal</a>
+      <a class="btn view" href="index.md">Markdown Index</a>
+    </div>
+
+    <section class="section">
+      <h2>Primary Academic Submissions</h2>
+      <div class="downloads">
+        <div class="dl">
+          <span class="label">SWE4900A SMERS Project Concept.pdf</span>
+          <span class="btns">
+            <a class="btn view" href="pdfs/SWE4900A%20SMERS%20Project%20Concept.pdf">Open</a>
+            <a class="btn download" href="pdfs/SWE4900A%20SMERS%20Project%20Concept.pdf" download>Download</a>
+          </span>
+        </div>
+        <div class="dl">
+          <span class="label">SWE4900A SMERS Refined Project Concept.pdf</span>
+          <span class="btns">
+            <a class="btn view" href="pdfs/SWE4900A%20SMERS%20Refined%20Project%20Concept.pdf">Open</a>
+            <a class="btn download" href="pdfs/SWE4900A%20SMERS%20Refined%20Project%20Concept.pdf" download>Download</a>
+          </span>
+        </div>
+        <div class="dl">
+          <span class="label">SWE4900A SMERS Project Proposal.pdf</span>
+          <span class="btns">
+            <a class="btn view" href="pdfs/SWE4900A%20SMERS%20Project%20Proposal.pdf">Open</a>
+            <a class="btn download" href="pdfs/SWE4900A%20SMERS%20Project%20Proposal.pdf" download>Download</a>
+          </span>
+        </div>
+        <div class="dl">
+          <span class="label">SWE4900A SMERS FINAL DOCUMENTATION.pdf</span>
+          <span class="btns">
+            <a class="btn view" href="pdfs/SWE4900A%20SMERS%20FINAL%20DOCUMENTATION.pdf">Open</a>
+            <a class="btn download" href="pdfs/SWE4900A%20SMERS%20FINAL%20DOCUMENTATION.pdf" download>Download</a>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Design and UML Artifacts</h2>
+      <div class="downloads">
+        <div class="dl">
+          <span class="label">SWE4900 SMERS Software Design Document.pdf</span>
+          <span class="btns">
+            <a class="btn view" href="pdfs/SWE4900%20SMERS%20Software%20Design%20Document.pdf">Open</a>
+            <a class="btn download" href="pdfs/SWE4900%20SMERS%20Software%20Design%20Document.pdf" download>Download</a>
+          </span>
+        </div>
+        <div class="dl">
+          <span class="label">SMERS UML Designs.mdj</span>
+          <span class="btns">
+            <a class="btn view" href="pdfs/SMERS%20UML%20Designs.mdj">Open</a>
+            <a class="btn download" href="pdfs/SMERS%20UML%20Designs.mdj" download>Download</a>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Progress and Supporting Evidence</h2>
+      <ul class="list">
+        <li><a href="pdfs/SWE4900A%20SMERS%20Project%20Progress%201.pdf">SWE4900A SMERS Project Progress 1.pdf</a></li>
+        <li><a href="pdfs/SWE4900%20SMERS%2090%25%20Screenshots.pdf">SWE4900 SMERS 90% Screenshots.pdf</a></li>
+        <li><a href="pdfs/SWE4900A%20SMERS%20LOGBOOK%20PICTURES.pdf">SWE4900A SMERS LOGBOOK PICTURES.pdf</a></li>
+        <li><a href="pdfs/SWE4900%20Log%20Book.pdf">SWE4900 Log Book.pdf</a></li>
+      </ul>
+      <p class="print-note">Tip: Use browser print to export this page as a single admissions-ready index sheet.</p>
+    </section>
+
+    <p class="small">Maintained under <strong>docs/</strong> in the SMERS repository.</p>
+  </main>
+</body>
+</html>
