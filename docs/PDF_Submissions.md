@@ -21,3 +21,4 @@ Official academic documents are stored in:
 ## Design Documentation (Includes UML Content)
 
 1. [SWE4900 SMERS Software Design Document.pdf](pdfs/SWE4900%20SMERS%20Software%20Design%20Document.pdf)
+2. [SMERS UML Designs.mdj](pdfs/SMERS%20UML%20Designs.mdj)
