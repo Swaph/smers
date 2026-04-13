@@ -7,6 +7,7 @@ Welcome to the formal project documentation set for the Smart Maternal Emergency
 1. [Project Concept](Project_Concept.md)
 2. [Project Proposal](Project_Proposal.md)
 3. [Final Project Thesis](Final_Project_Thesis.md)
+4. [Official PDF Submissions](PDF_Submissions.md)
 
 ## Recommended Reading Order
 
