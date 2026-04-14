@@ -5,18 +5,16 @@ Welcome to the formal project documentation set for the Smart Maternal Emergency
 ## Documents
 
 1. [Documentation Home (Web View)](Home.html)
-2. [Admissions Pack (Web View)](Admissions_Pack.html)
-3. [Project Concept](Project_Concept.md)
-4. [Project Proposal](Project_Proposal.md)
-5. [Final Project Thesis](Final_Project_Thesis.md)
-6. [Official PDF Submissions (Web View)](PDF_Submissions.html)
-7. [Official PDF Submissions (Markdown)](PDF_Submissions.md)
+2. [Project Concept](Project_Concept.md)
+3. [Project Proposal](Project_Proposal.md)
+4. [Final Project Thesis](Final_Project_Thesis.md)
 
 ## Recommended Reading Order
 
-1. Start with the concept paper for problem framing and rationale.
-2. Continue with the proposal for methodology, work plan, and risk controls.
-3. Finish with the final thesis for implementation, findings, and evaluation.
+1. Start with the home page for the project overview and complete document archive.
+2. Continue with the concept paper for problem framing and rationale.
+3. Move to the proposal for methodology, work plan, and risk controls.
+4. Finish with the final thesis for implementation, findings, and evaluation.
 
 ## Citation Note
 
